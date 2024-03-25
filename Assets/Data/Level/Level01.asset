@@ -12,7 +12,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f82c2b452ed240d8bc3ffe0edd35338, type: 3}
   m_Name: Level01
   m_EditorClassIdentifier: 
-  Slots: []
-  Columns: 0
-  Rows: 0
-  Configuration: {fileID: 0}
+  Slots:
+  - ItemType: 1
+    Coordinates: {x: 0, y: 0}
+  - ItemType: 1
+    Coordinates: {x: 0, y: 1}
+  - ItemType: 1
+    Coordinates: {x: 0, y: 2}
+  - ItemType: 0
+    Coordinates: {x: 0, y: 3}
+  - ItemType: 0
+    Coordinates: {x: 0, y: 4}
+  - ItemType: 1
+    Coordinates: {x: 1, y: 0}
+  - ItemType: 1
+    Coordinates: {x: 1, y: 1}
+  - ItemType: 1
+    Coordinates: {x: 1, y: 2}
+  - ItemType: 0
+    Coordinates: {x: 1, y: 3}
+  - ItemType: 0
+    Coordinates: {x: 1, y: 4}
+  - ItemType: 1
+    Coordinates: {x: 2, y: 0}
+  - ItemType: 3
+    Coordinates: {x: 2, y: 1}
+  - ItemType: 3
+    Coordinates: {x: 2, y: 2}
+  - ItemType: 0
+    Coordinates: {x: 2, y: 3}
+  - ItemType: 0
+    Coordinates: {x: 2, y: 4}
+  - ItemType: 0
+    Coordinates: {x: 3, y: 0}
+  - ItemType: 0
+    Coordinates: {x: 3, y: 1}
+  - ItemType: 3
+    Coordinates: {x: 3, y: 2}
+  - ItemType: 0
+    Coordinates: {x: 3, y: 3}
+  - ItemType: 3
+    Coordinates: {x: 3, y: 4}
+  - ItemType: 0
+    Coordinates: {x: 4, y: 0}
+  - ItemType: 0
+    Coordinates: {x: 4, y: 1}
+  - ItemType: 0
+    Coordinates: {x: 4, y: 2}
+  - ItemType: 0
+    Coordinates: {x: 4, y: 3}
+  - ItemType: 2
+    Coordinates: {x: 4, y: 4}
+  Columns: 5
+  Rows: 5
+  Configuration: {fileID: 11400000, guid: cbfc62fcf3639410db00e9b19f48b991, type: 2}
