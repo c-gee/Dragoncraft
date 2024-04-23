@@ -5,10 +5,17 @@ namespace Dragoncraft
 {
     public class ObjectPoolComponent : MonoBehaviour
     {
-        [SerializeField] private GameObject _prefab;
-        [SerializeField] private int _poolSize;
-        [SerializeField] private bool _allowCreation;
-        [SerializeField] private List<GameObject> _gameObjects = new List<GameObject>();
+        [SerializeField]
+        private GameObject _prefab;
+
+        [SerializeField]
+        private int _poolSize;
+
+        [SerializeField]
+        private bool _allowCreation;
+
+        [SerializeField]
+        private List<GameObject> _gameObjects = new List<GameObject>();
 
         private void Awake()
         {

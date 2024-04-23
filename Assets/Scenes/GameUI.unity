@@ -560,6 +560,10 @@ PrefabInstance:
       propertyPath: m_text
       value: 'Food: 9999'
       objectReference: {fileID: 0}
+    - target: {fileID: 1998456373684955918, guid: ec82872ec0bfd47c89950b126f32df50, type: 3}
+      propertyPath: _type
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6818508320346875507, guid: ec82872ec0bfd47c89950b126f32df50, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2323,6 +2327,10 @@ PrefabInstance:
     - target: {fileID: 1885455271604064585, guid: ec82872ec0bfd47c89950b126f32df50, type: 3}
       propertyPath: m_text
       value: 'Wood: 9999'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1998456373684955918, guid: ec82872ec0bfd47c89950b126f32df50, type: 3}
+      propertyPath: _type
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6818508320346875507, guid: ec82872ec0bfd47c89950b126f32df50, type: 3}
       propertyPath: m_Pivot.x

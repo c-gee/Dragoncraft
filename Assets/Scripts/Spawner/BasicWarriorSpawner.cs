@@ -1,12 +1,12 @@
 using System;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace Dragoncraft
 {
     public class BasicWarriorSpawner : BaseSpawner
     {
-        [SerializeField] public UnitData _unitData;
+        [SerializeField]
+        private UnitData _unitData;
 
         private void OnEnable()
         {
@@ -21,6 +21,7 @@ namespace Dragoncraft
         private void OnBasicWarriorSpawned(BasicWarriorSpawnMessage message)
         {
             GameObject warrior = SpawnObject();
+
             UnitComponent unit = warrior.GetComponent<UnitComponent>();
 
             if (unit == null)
