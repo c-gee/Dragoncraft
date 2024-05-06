@@ -8,6 +8,7 @@ namespace Dragoncraft
         private MeshCollider _meshCollider = null;
         private Vector3 _startPosition;
         private List<UnitComponent> _units = new List<UnitComponent>();
+        private float _distanceBetweenUnits = 2.0f;
 
         private void Awake()
         {
@@ -35,6 +36,12 @@ namespace Dragoncraft
             {
                 Vector3 endPosition = GetMousePosition();
                 SelectUnits(_startPosition, endPosition);
+            }
+
+            if (Input.GetKeyUp(KeyCode.Mouse1))
+            {
+                Vector3 movePosition = GetMousePosition();
+                MoveSelectedUnits(movePosition);
             }
         }
 
@@ -75,6 +82,26 @@ namespace Dragoncraft
                     unit.Selected(true);
                     _units.Add(unit);
                 }
+            }
+        }
+
+        private void MoveSelectedUnits(Vector3 movePosition)
+        {
+            int rows = Mathf.RoundToInt(Mathf.Sqrt(_units.Count));
+            int counter = 0;
+
+            for (int i = 0; i < _units.Count; i++)
+            {
+                if (i > 0 && (i % rows) == 0)
+                {
+                    counter++;
+                }
+
+                float offsetX = (i % rows) * _distanceBetweenUnits;
+                float offsetZ = counter * _distanceBetweenUnits;
+                Vector3 offset = new Vector3(offsetX, 0, offsetZ);
+
+                _units[i].MoveTo(movePosition + offset);
             }
         }
     }

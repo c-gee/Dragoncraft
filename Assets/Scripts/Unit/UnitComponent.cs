@@ -19,12 +19,32 @@ namespace Dragoncraft
 
         private Animator _animator;
         private Renderer _renderer;
+        private Vector3 _movePosition;
+        private bool _shouldMove;
 
         private void Awake()
         {
             _renderer = GetComponentInChildren<Renderer>();
             _animator = GetComponent<Animator>();
             _animator.Play("Idle");
+        }
+
+        private void Update()
+        {
+            if (!_shouldMove)
+            {
+                return;
+            }
+
+            if (Vector3.Distance(transform.position, _movePosition) < 0.5f)
+            {
+                _animator.Play("Idle");
+                _shouldMove = false;
+                return;
+            }
+
+            Vector3 pos = (_movePosition - transform.position).normalized;
+            transform.position += pos * Time.deltaTime * WalkSpeed;
         }
 
         public void CopyData(UnitData unitData)
@@ -63,6 +83,14 @@ namespace Dragoncraft
                     material.DisableKeyword("_EMISSION");
                 }
             }
+        }
+
+        public void MoveTo(Vector3 position)
+        {
+            transform.LookAt(position);
+            _movePosition = position;
+            _animator.Play("Run");
+            _shouldMove = true;
         }
     }
 }
