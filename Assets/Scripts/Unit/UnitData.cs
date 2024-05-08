@@ -14,5 +14,6 @@ namespace Dragoncraft
         public float WalkSpeed;
         public float AttackSpeed;
         public Color SelectedColor;
+        public ActionType Actions;
     }
 }
