@@ -22,3 +22,12 @@ MonoBehaviour:
   AttackSpeed: 5
   SelectedColor: {r: 0, g: 0.6627451, b: 1, a: 0}
   Actions: 15
+  AnimationStateAttack01: Attack01
+  AnimationStateAttack02: Attack02
+  AnimationStateDefense: Victory
+  AnimationStateMove: Run
+  AnimationStateIdle: Idle
+  AnimationStateCollect: GetHit
+  AnimationStateDeath: Death
+  OriginalColor: {r: 0, g: 0, b: 0, a: 0}
+  AttackRange: 0

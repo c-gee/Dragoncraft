@@ -21,6 +21,7 @@ namespace Dragoncraft
         private void OnBasicWarriorSpawned(BasicWarriorSpawnMessage message)
         {
             GameObject warrior = SpawnObject();
+            warrior.SetLayerMaskToAllChildren("Unit");
 
             UnitComponent unit = warrior.GetComponent<UnitComponent>();
 

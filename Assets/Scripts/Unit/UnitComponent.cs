@@ -16,35 +16,136 @@ namespace Dragoncraft
         public float WalkSpeed;
         public float AttackSpeed;
         public Color SelectedColor;
+        public Color OriginalColor;
+        public float AttackRange;
+        public ActionType Actions;
 
         private Animator _animator;
         private Renderer _renderer;
         private Vector3 _movePosition;
         private bool _shouldMove;
+        private bool _shouldAttack;
+        private ActionType _action;
+        private UnitData _unitData;
+        private float _minDistance = 0.5f;
 
         private void Awake()
         {
             _renderer = GetComponentInChildren<Renderer>();
             _animator = GetComponent<Animator>();
-            _animator.Play("Idle");
+            EnableMovement(true);
+        }
+
+        private void OnEnable()
+        {
+            MessageQueueManager.Instance.AddListener<ActionCommandMessage>(OnActionCommandReceived);
+        }
+
+        private void OnDisable()
+        {
+            MessageQueueManager.Instance.RemoveListener<ActionCommandMessage>(OnActionCommandReceived);
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (!collision.gameObject.CompareTag("Plane"))
+            {
+                _animator.Play(
+                    _unitData.GetAnimationState(UnitAnimationState.Idle)
+                );
+
+                _shouldMove = false;
+            }
         }
 
         private void Update()
+        {
+            switch (_action)
+            {
+                case ActionType.Attack:
+                    UpdateAttack();
+                    break;
+                case ActionType.Defense:
+                    UpdateDefense();
+                    break;
+                case ActionType.Move:
+                    UpdateMovement();
+                    break;
+                case ActionType.Collect:
+                    UpdateCollect();
+                    break;
+                case ActionType.Build:
+                case ActionType.Upgrade:
+                case ActionType.None:
+                default:
+                    EnableMovement(false);
+                    break;
+            }
+        }
+
+        private void OnActionCommandReceived(ActionCommandMessage message)
+        {
+            _action = message.Action;
+            _shouldAttack = false;
+        }
+
+        private void EnableMovement(bool enabled)
+        {
+            if (enabled)
+            {
+                _animator.Play(
+                    _unitData.GetAnimationState(UnitAnimationState.Move)
+                );
+            }
+            else
+            {
+                _animator.Play(
+                    _unitData.GetAnimationState(UnitAnimationState.Idle)
+                );
+            }
+
+            _shouldMove = enabled;
+        }
+
+        private void UpdateAttack()
+        {
+            UnitAnimationState attackState = (UnityEngine.Random.value < 0.5f)
+                ? UnitAnimationState.Attack01 : UnitAnimationState.Attack02;
+            UpdatePosition(_minDistance + AttackRange, attackState);
+        }
+
+        private void UpdateDefense()
+        {
+            UpdatePosition(_minDistance, UnitAnimationState.Defense);
+        }
+
+        private void UpdateMovement()
+        {
+            UpdatePosition(_minDistance, UnitAnimationState.Move);
+        }
+
+        private void UpdateCollect()
+        {
+            UpdatePosition(_minDistance, UnitAnimationState.Collect);
+        }
+
+        private void UpdatePosition(float range, UnitAnimationState state)
         {
             if (!_shouldMove)
             {
                 return;
             }
 
-            if (Vector3.Distance(transform.position, _movePosition) < 0.5f)
+            if (Vector3.Distance(transform.position, _movePosition) < range)
             {
-                _animator.Play("Idle");
+                _animator.Play(_unitData.GetAnimationState(state));
                 _shouldMove = false;
+                _shouldAttack = true;
                 return;
             }
 
-            Vector3 pos = (_movePosition - transform.position).normalized;
-            transform.position += pos * Time.deltaTime * WalkSpeed;
+            Vector3 direction = (_movePosition - transform.position).normalized;
+            transform.position += direction * Time.deltaTime * WalkSpeed;
         }
 
         public void CopyData(UnitData unitData)
@@ -59,6 +160,12 @@ namespace Dragoncraft
             WalkSpeed = unitData.WalkSpeed;
             AttackSpeed = unitData.AttackSpeed;
             SelectedColor = unitData.SelectedColor;
+            OriginalColor = unitData.OriginalColor;
+            AttackRange = unitData.AttackRange;
+            Actions = unitData.Actions;
+            _unitData = unitData;
+
+            EnableMovement(false);
         }
 
         public void Selected(bool selected)
@@ -75,12 +182,11 @@ namespace Dragoncraft
             {
                 if (selected)
                 {
-                    material.EnableKeyword("_EMISSION");
                     material.SetColor("_EmissionColor", SelectedColor * 0.5f);
                 }
                 else
                 {
-                    material.DisableKeyword("_EMISSION");
+                    material.SetColor("_EmissionColor", OriginalColor);
                 }
             }
         }
