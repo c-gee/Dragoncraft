@@ -28,12 +28,13 @@ namespace Dragoncraft
         private ActionType _action;
         private UnitData _unitData;
         private float _minDistance = 0.5f;
+        private float _attackCooldown;
 
         private void Awake()
         {
             _renderer = GetComponentInChildren<Renderer>();
             _animator = GetComponent<Animator>();
-            EnableMovement(true);
+            _action = ActionType.Move;
         }
 
         private void OnEnable()
@@ -112,6 +113,27 @@ namespace Dragoncraft
             UnitAnimationState attackState = (UnityEngine.Random.value < 0.5f)
                 ? UnitAnimationState.Attack01 : UnitAnimationState.Attack02;
             UpdatePosition(_minDistance + AttackRange, attackState);
+
+            if (!_shouldAttack || AttackRange <= 0)
+            {
+                return;
+            }
+
+            _attackCooldown -= Time.deltaTime;
+
+            if (_attackCooldown < 0)
+            {
+                MessageQueueManager.Instance.SendMessage(
+                    new FireballSpawnMessage
+                    {
+                        Position = transform.position,
+                        Rotation = transform.rotation
+                    }
+                );
+
+                _attackCooldown = AttackSpeed;
+            }
+
         }
 
         private void UpdateDefense()
@@ -195,8 +217,7 @@ namespace Dragoncraft
         {
             transform.LookAt(position);
             _movePosition = position;
-            _animator.Play("Run");
-            _shouldMove = true;
+            EnableMovement(true);
         }
     }
 }

@@ -9,5 +9,11 @@ namespace Dragoncraft
         {
             MessageQueueManager.Instance.SendMessage(new BasicWarriorSpawnMessage());
         }
+
+        [MenuItem("Dragoncraft/Debug/Unit/Spawn Mage %j")]
+        private static void SpawnMage()
+        {
+            MessageQueueManager.Instance.SendMessage(new BasicMageSpawnMessage());
+        }
     }
 }
