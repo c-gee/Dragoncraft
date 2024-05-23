@@ -42,7 +42,23 @@ namespace Dragoncraft
                 Vector3 position = new Vector3(x, 0, z);
 
                 Instantiate(levelItem.Prefab, position, Quaternion.identity, transform);
+
+                GameObject item = Instantiate(levelItem.Prefab, position, Quaternion.identity, transform);
+
+                switch (levelItem.CollisionType)
+                {
+                    case LevelItemCollisionType.Rigidbody:
+                        item.AddComponent<BoxCollider>();
+                        break;
+                    case LevelItemCollisionType.NavMesh:
+                        item.AddComponent<UnityEngine.AI.NavMeshObstacle>();
+                        break;
+                    case LevelItemCollisionType.None:
+                    default:
+                        break;
+                }
             }
+
         }
     }
 }

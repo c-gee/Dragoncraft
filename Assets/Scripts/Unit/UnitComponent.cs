@@ -47,18 +47,6 @@ namespace Dragoncraft
             MessageQueueManager.Instance.RemoveListener<ActionCommandMessage>(OnActionCommandReceived);
         }
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (!collision.gameObject.CompareTag("Plane"))
-            {
-                _animator.Play(
-                    _unitData.GetAnimationState(UnitAnimationState.Idle)
-                );
-
-                _shouldMove = false;
-            }
-        }
-
         private void Update()
         {
             switch (_action)
@@ -166,8 +154,7 @@ namespace Dragoncraft
                 return;
             }
 
-            Vector3 direction = (_movePosition - transform.position).normalized;
-            transform.position += direction * Time.deltaTime * WalkSpeed;
+            UpdatePosition();
         }
 
         public void CopyData(UnitData unitData)
@@ -218,6 +205,29 @@ namespace Dragoncraft
             transform.LookAt(position);
             _movePosition = position;
             EnableMovement(true);
+        }
+
+        protected virtual void OnCollisionEnter(Collision collision)
+        {
+            if (!collision.gameObject.CompareTag("Plane"))
+            {
+                _animator.Play(
+                    _unitData.GetAnimationState(UnitAnimationState.Idle)
+                );
+
+                _shouldMove = false;
+            }
+        }
+
+        protected virtual void UpdatePosition()
+        {
+            Vector3 direction = (_movePosition - transform.position).normalized;
+            transform.position += direction * Time.deltaTime * WalkSpeed;
+        }
+
+        protected Vector3 GetFinalPosition()
+        {
+            return _movePosition;
         }
     }
 }
