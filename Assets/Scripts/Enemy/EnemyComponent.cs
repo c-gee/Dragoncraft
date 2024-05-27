@@ -53,5 +53,40 @@ namespace Dragoncraft
         {
             _renderer.material.color = _originalColor;
         }
+
+        public void Selected()
+        {
+            // Test code for the damage
+            TakeDamage(Attack);
+        }
+
+        public void TakeDamage(float attack)
+        {
+            if (Health <= 0)
+            {
+                return;
+            }
+
+            float damage = attack - Defense;
+
+            if (damage > 0)
+            {
+                Health -= damage;
+
+                // The offset is 1/4 of the model size
+                Vector3 position = transform.position + (_renderer.bounds.size * 0.25f);
+
+                MessageQueueManager.Instance.SendMessage(
+                    new DamageFeedbackMessage() { Damage = damage, Position = position }
+                );
+            }
+
+            if (Health <= 0)
+            {
+                _animator.Play(
+                    _enemyData.GetAnimationState(UnitAnimationState.Death)
+                );
+            }
+        }
     }
 }
