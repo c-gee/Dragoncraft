@@ -3,39 +3,19 @@ using UnityEngine;
 
 namespace Dragoncraft
 {
-    [RequireComponent(typeof(BoxCollider), typeof(Animator))]
-    public class UnitComponent : MonoBehaviour
+    public class UnitComponent : BaseCharacter
     {
-        public string ID;
         public UnitType Type;
         public int Level;
         public float LevelMultiplier;
-        public float Health;
-        public float Attack;
-        public float Defense;
-        public float WalkSpeed;
-        public float AttackSpeed;
-        public Color SelectedColor;
-        public Color OriginalColor;
-        public float AttackRange;
         public ActionType Actions;
 
-        private Animator _animator;
-        private Renderer _renderer;
         private Vector3 _movePosition;
         private bool _shouldMove;
         private bool _shouldAttack;
-        private ActionType _action;
         private UnitData _unitData;
-        private float _minDistance = 0.5f;
         private float _attackCooldown;
-
-        private void Awake()
-        {
-            _renderer = GetComponentInChildren<Renderer>();
-            _animator = GetComponent<Animator>();
-            _action = ActionType.Move;
-        }
+        private float _minDistance = 0.5f;
 
         private void OnEnable()
         {
@@ -49,6 +29,11 @@ namespace Dragoncraft
 
         private void Update()
         {
+            if (IsDead)
+            {
+                return;
+            }
+
             switch (_action)
             {
                 case ActionType.Attack:
@@ -82,15 +67,11 @@ namespace Dragoncraft
         {
             if (enabled)
             {
-                _animator.Play(
-                    _unitData.GetAnimationState(UnitAnimationState.Move)
-                );
+                PlayAnimation(UnitAnimationState.Move);
             }
             else
             {
-                _animator.Play(
-                    _unitData.GetAnimationState(UnitAnimationState.Idle)
-                );
+                PlayAnimation(UnitAnimationState.Idle);
             }
 
             _shouldMove = enabled;
@@ -115,7 +96,8 @@ namespace Dragoncraft
                     new FireballSpawnMessage
                     {
                         Position = transform.position,
-                        Rotation = transform.rotation
+                        Rotation = transform.rotation,
+                        Damage = Attack
                     }
                 );
 
@@ -139,40 +121,16 @@ namespace Dragoncraft
             UpdatePosition(_minDistance, UnitAnimationState.Collect);
         }
 
-        private void UpdatePosition(float range, UnitAnimationState state)
-        {
-            if (!_shouldMove)
-            {
-                return;
-            }
-
-            if (Vector3.Distance(transform.position, _movePosition) < range)
-            {
-                _animator.Play(_unitData.GetAnimationState(state));
-                _shouldMove = false;
-                _shouldAttack = true;
-                return;
-            }
-
-            UpdatePosition();
-        }
-
         public void CopyData(UnitData unitData)
         {
-            ID = Guid.NewGuid().ToString();
+            CopyBaseData(unitData);
             Type = unitData.Type;
             Level = unitData.Level;
             LevelMultiplier = unitData.LevelMultiplier;
-            Health = unitData.Health;
-            Attack = unitData.Attack;
-            Defense = unitData.Defense;
-            WalkSpeed = unitData.WalkSpeed;
-            AttackSpeed = unitData.AttackSpeed;
-            SelectedColor = unitData.SelectedColor;
-            OriginalColor = unitData.OriginalColor;
-            AttackRange = unitData.AttackRange;
             Actions = unitData.Actions;
+
             _unitData = unitData;
+            _action = ActionType.Move;
 
             EnableMovement(false);
         }
@@ -195,7 +153,7 @@ namespace Dragoncraft
                 }
                 else
                 {
-                    material.SetColor("_EmissionColor", OriginalColor);
+                    material.SetColor("_EmissionColor", _emissionColor);
                 }
             }
         }
@@ -207,16 +165,21 @@ namespace Dragoncraft
             EnableMovement(true);
         }
 
-        protected virtual void OnCollisionEnter(Collision collision)
+        private void UpdatePosition(float range, UnitAnimationState endState)
         {
-            if (!collision.gameObject.CompareTag("Plane"))
+            if (!_shouldMove)
             {
-                _animator.Play(
-                    _unitData.GetAnimationState(UnitAnimationState.Idle)
-                );
-
-                _shouldMove = false;
+                return;
             }
+
+            if (Vector3.Distance(transform.position, _movePosition) < range)
+            {
+                PlayAnimation(endState);
+                StopMovingAndAttack();
+                return;
+            }
+
+            UpdatePosition();
         }
 
         protected virtual void UpdatePosition()
@@ -228,6 +191,40 @@ namespace Dragoncraft
         protected Vector3 GetFinalPosition()
         {
             return _movePosition;
+        }
+
+        protected virtual void StopMovingAndAttack()
+        {
+            _shouldMove = false;
+            _shouldAttack = true;
+        }
+
+        protected override void UpdateState(ActionType action)
+        {
+            base.UpdateState(action);
+
+            switch (action)
+            {
+                case ActionType.Attack:
+                    EnableMovement(false);
+                    UnitAnimationState attackState = (UnityEngine.Random.value < 0.5f)
+                        ? UnitAnimationState.Attack01 : UnitAnimationState.Attack02;
+                    PlayAnimation(attackState);
+                    break;
+                case ActionType.Move:
+                    EnableMovement(true);
+                    break;
+                case ActionType.None:
+                    _movePosition = transform.position;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        protected override void PlayAnimation(UnitAnimationState state)
+        {
+            _animator.Play(_unitData.GetAnimationState(state));
         }
     }
 }
