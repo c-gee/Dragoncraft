@@ -4,10 +4,11 @@ using UnityEngine.AI;
 namespace Dragoncraft
 {
     [RequireComponent(typeof(NavMeshAgent), typeof(CollisionComponent))]
-    public class UnitComponentNavMesh : UnitComponent
+    public class EnemyComponentNavMesh : EnemyComponent
     {
         private NavMeshAgent _agent;
         private CollisionComponent _collisionComponent;
+        private Transform _targetToFollow;
 
         private void Start()
         {
@@ -29,22 +30,24 @@ namespace Dragoncraft
             }
         }
 
-        protected override void UpdatePosition()
+        private void Update()
         {
-            _agent.isStopped = false;
-            _agent.destination = GetFinalPosition();
-        }
+            if (!IsDead && _targetToFollow != null)
+            {
+                if (Vector3.Distance(transform.position, _targetToFollow.position) < WalkSpeed)
+                {
+                    return;
+                }
 
-        protected override void StopMovingAndAttack()
-        {
-            base.StopMovingAndAttack();
-            _agent.isStopped = true;
+                _agent.destination = _targetToFollow.position;
+            }
         }
 
         private void OnStartAttacking(Transform target)
         {
             transform.LookAt(target.position);
             _agent.isStopped = true;
+            _targetToFollow = null;
             UpdateState(ActionType.Attack);
         }
 
@@ -55,7 +58,17 @@ namespace Dragoncraft
                 return;
             }
 
-            UpdateState(ActionType.None);
+            if (!opponentIsDead)
+            {
+                transform.LookAt(target.position);
+                _agent.isStopped = false;
+                _targetToFollow = target;
+                UpdateState(ActionType.Move);
+            }
+            else
+            {
+                UpdateState(ActionType.None);
+            }
         }
     }
 }

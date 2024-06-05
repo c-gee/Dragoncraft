@@ -45,13 +45,13 @@ namespace Dragoncraft
         private void OnEnemySpawned(BaseEnemySpawnMessage message)
         {
             GameObject enemyObject = SpawnObject();
-            enemyObject.SetLayerMaskToAllChildren("Unit");
+            enemyObject.SetLayerMaskToAllChildren("Enemy");
 
-            EnemyComponent enemyComponent = enemyObject.GetComponent<EnemyComponent>();
+            EnemyComponentNavMesh enemyComponent = enemyObject.GetComponent<EnemyComponentNavMesh>();
 
             if (enemyComponent == null)
             {
-                enemyComponent = enemyObject.AddComponent<EnemyComponent>();
+                enemyComponent = enemyObject.AddComponent<EnemyComponentNavMesh>();
             }
 
             enemyComponent.CopyData(_enemyData, message.SpawnPoint);
