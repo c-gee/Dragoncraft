@@ -125,7 +125,10 @@ namespace Dragoncraft
                 float offsetZ = counter * _distanceBetweenUnits;
                 Vector3 offset = new Vector3(offsetX, 0, offsetZ);
 
-                _units[i].MoveTo(movePosition + offset);
+                if (_units[i] != null)
+                {
+                    _units[i].MoveTo(movePosition + offset);
+                }
             }
         }
     }

@@ -12,16 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a3d67b9845844fb2924f5e101c90e95, type: 3}
   m_Name: BasicMage
   m_EditorClassIdentifier: 
-  Type: 1
-  Level: 1
-  LevelMultiplier: 1.2
   Health: 3
   Attack: 3
   Defense: 1
-  WalkSpeed: 5
+  WalkSpeed: 2
   AttackSpeed: 1.8
   SelectedColor: {r: 0.7490196, g: 0, b: 1, a: 1}
-  Actions: 15
   AnimationStateAttack01: attack01
   AnimationStateAttack02: attack02
   AnimationStateDefense: victory
@@ -29,5 +25,9 @@ MonoBehaviour:
   AnimationStateIdle: idle
   AnimationStateCollect: GetHit
   AnimationStateDeath: die
-  OriginalColor: {r: 1, g: 1, b: 1, a: 1}
   AttackRange: 8
+  ColliderSize: 1.5
+  Type: 1
+  Level: 1
+  LevelMultiplier: 1.2
+  Actions: 15

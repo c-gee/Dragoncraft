@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Dragoncraft
 {
@@ -100,15 +101,20 @@ namespace Dragoncraft
 
         private void RemoveUnitComponent(GameObject portrait)
         {
-            UnitComponent unit = portrait.GetComponent<UnitComponent>();
-            unit.Selected(false);
-            Destroy(unit);
+            BaseCharacter character = portrait.GetComponent<BaseCharacter>();
+            Destroy(character);
+
+            CollisionComponent collision = portrait.GetComponent<CollisionComponent>();
+            Destroy(collision);
+
+            NavMeshAgent navMeshAgent = portrait.GetComponent<NavMeshAgent>();
+            Destroy(navMeshAgent);
 
             Rigidbody rigidbody = portrait.GetComponent<Rigidbody>();
             Destroy(rigidbody);
 
-            BoxCollider boxCollider = portrait.GetComponent<BoxCollider>();
-            Destroy(boxCollider);
+            SphereCollider sphereCollider = portrait.GetComponent<SphereCollider>();
+            Destroy(sphereCollider);
         }
     }
 }

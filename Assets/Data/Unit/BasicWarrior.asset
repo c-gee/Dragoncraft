@@ -12,16 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a3d67b9845844fb2924f5e101c90e95, type: 3}
   m_Name: BasicWarrior
   m_EditorClassIdentifier: 
-  Type: 0
-  Level: 1
-  LevelMultiplier: 1.2
   Health: 5
   Attack: 2
   Defense: 1
-  WalkSpeed: 10
-  AttackSpeed: 5
+  WalkSpeed: 3
+  AttackSpeed: 1.5
   SelectedColor: {r: 0, g: 0.6627451, b: 1, a: 0}
-  Actions: 15
   AnimationStateAttack01: Attack01
   AnimationStateAttack02: Attack02
   AnimationStateDefense: Victory
@@ -29,5 +25,9 @@ MonoBehaviour:
   AnimationStateIdle: Idle
   AnimationStateCollect: GetHit
   AnimationStateDeath: Death
-  OriginalColor: {r: 0, g: 0, b: 0, a: 0}
   AttackRange: 0
+  ColliderSize: 1.5
+  Type: 0
+  Level: 1
+  LevelMultiplier: 1.2
+  Actions: 15

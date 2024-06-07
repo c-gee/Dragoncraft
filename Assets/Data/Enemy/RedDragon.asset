@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f392b9bd6e1d470892d71615e4dae12, type: 3}
   m_Name: RedDragon
   m_EditorClassIdentifier: 
-  Type: 2
   Health: 100
   Attack: 10
   Defense: 3
-  WalkSpeed: 3
+  WalkSpeed: 1
   AttackSpeed: 2
   SelectedColor: {r: 1, g: 0.4117647, b: 0.38039216, a: 0}
   AnimationStateAttack01: Basic Attack
@@ -24,4 +23,8 @@ MonoBehaviour:
   AnimationStateDefense: Defend
   AnimationStateMove: Run
   AnimationStateIdle: Idle
+  AnimationStateCollect: 
   AnimationStateDeath: Die
+  AttackRange: 0
+  ColliderSize: 3.5
+  Type: 2

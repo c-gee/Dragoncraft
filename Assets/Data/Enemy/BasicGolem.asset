@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f392b9bd6e1d470892d71615e4dae12, type: 3}
   m_Name: BasicGolem
   m_EditorClassIdentifier: 
-  Type: 1
   Health: 20
   Attack: 5
   Defense: 2
-  WalkSpeed: 2
+  WalkSpeed: 1.5
   AttackSpeed: 1
   SelectedColor: {r: 1, g: 0.4117647, b: 0.38039216, a: 0}
   AnimationStateAttack01: Attack01
@@ -24,4 +23,8 @@ MonoBehaviour:
   AnimationStateDefense: Victory
   AnimationStateMove: Walk
   AnimationStateIdle: Idle
+  AnimationStateCollect: 
   AnimationStateDeath: Die
+  AttackRange: 0
+  ColliderSize: 2.5
+  Type: 1
